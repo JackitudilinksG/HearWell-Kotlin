@@ -42,7 +42,14 @@ export default function index() {
     function getDurationFormatted(millis) {
         const minutes = millis/1000/60;
         const seconds = Math.round((minutes - Math.floor(minutes))*60);
-        return seconds < 10 ? `${Math.floor(minutes)}:0${seconds}` : `${Math.floor(minutes)}:${seconds}`
+        
+        if(seconds < 10){
+            const duration = `${Math.floor(minutes)}:0${seconds}`
+        } else {
+            const duration = `${Math.floor(minutes)}:${seconds}`
+        }
+        console.log(duration);
+        return duration;
     }
 
     function getRecordingLines() {
@@ -62,7 +69,7 @@ export default function index() {
         <View style={styles.container}>
             <Button title={recording ? "Stop Recording" : "Start Recording"} onPress={recording ? stopRecording : startRecording}></Button>
             {getRecordingLines()}
-            <Button title={recordings.length > 0 ? "Clear Recordings" : ""} onPress={clearRecordings} style={recordings.length > 0 ? styles.exists : styles.nonexists}></Button>
+            <Button title={recordings.length > 0 ? "Clear Recordings" : ""} onPress={clearRecordings} color={recordings.length <= 0 ? "#fff" : "orange"}></Button>
         </View>
     );
 
@@ -85,12 +92,9 @@ const styles = StyleSheet.create({
     },
     fill: {
         flex: 1,
-        margin: 15
+        marginRight: 30
     },
-    nonexists: {
-        backgroundColor: "#fff"
-    },
-    exists: {
-        backgroundColor: "orange"
+    clear: {
+        color: "#000"
     }
 })
