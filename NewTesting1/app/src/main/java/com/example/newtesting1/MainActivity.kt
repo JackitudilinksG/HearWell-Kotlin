@@ -6,7 +6,6 @@ import android.media.AudioTrack
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -60,13 +59,49 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
                 color = Color.Red
             )
         )
-        Button(onClick = {
+        Button(onClick = { // Button 1
             CoroutineScope(Dispatchers.IO).launch { // Runs in a background thread
-                playTone(3000.0, 3000)
+                playTone(250.0, 3000)
             }
         }) {
-            Text("Play Tune")
+            Text("250Hz")
         }
+        Button(onClick = { // Button 2
+            CoroutineScope(Dispatchers.IO).launch { // Runs in a background thread
+                playTone(500.0, 3000)
+            }
+        }) {
+            Text("500Hz")
+        }
+        Button(onClick = { // Button 3
+            CoroutineScope(Dispatchers.IO).launch { // Runs in a background thread
+                playTone(1000.0, 3000)
+            }
+        }) {
+            Text("1kHz")
+        }
+        Button(onClick = { // Button 4
+            CoroutineScope(Dispatchers.IO).launch { // Runs in a background thread
+                playTone(2000.0, 3000)
+            }
+        }) {
+            Text("2kHz")
+        }
+        Button(onClick = { // Button 5
+            CoroutineScope(Dispatchers.IO).launch { // Runs in a background thread
+                playTone(4000.0, 3000)
+            }
+        }) {
+            Text("4kHz")
+        }
+        Button(onClick = { // Button 6
+            CoroutineScope(Dispatchers.IO).launch { // Runs in a background thread
+                playTone(8000.0, 3000)
+            }
+        }) {
+            Text("8kHz")
+        }
+
     }
 }
 
