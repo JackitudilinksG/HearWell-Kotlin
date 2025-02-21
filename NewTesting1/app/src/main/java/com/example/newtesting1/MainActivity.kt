@@ -17,7 +17,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -53,7 +55,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     var side : String = "MIDDLE"
-    var vol by Remember { mutableStateOf(50)}
+    var vol : Int = 0
+    val displayVol = remember { mutableStateOf(50) }
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -75,21 +78,21 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically
         ){
             Text(
-                text = vol.toString(),
+                text = displayVol.value.toString(),
                 fontSize = 100.sp
             )
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Button(onClick = { vol += 5 }) { Text("UP") }
-                Button(onClick = { vol -= 5 }) { Text("DOWN") }
+                Button(onClick = { displayVol.value += 5; vol += 500 }) { Text("UP") }
+                Button(onClick = { displayVol.value -= 5; vol -= 500 }) { Text("DOWN") }
             }
         }
         Column {
             Row {
                 Button(onClick = { // Button 1
                     CoroutineScope(Dispatchers.IO).launch { // Runs in a background thread
-                        playTone(250.0, 3000, volume = 1.0F, volumeBoost = 1000F, stereoSide = side)
+                        playTone(250.0, 3000, volume = 1.0F, volumeBoost = vol.toFloat(), stereoSide = side)
                     }
                 }) {
                     Text("250Hz")
