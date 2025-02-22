@@ -54,6 +54,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun UserTesting(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
     var side : String = "MIDDLE"
     var vol : Int = 0
     val displayVol = remember { mutableStateOf(50) }
@@ -138,6 +139,14 @@ fun UserTesting(modifier: Modifier = Modifier) {
                     }
                 }) {
                     Text("8kHz")
+                }
+
+                Button(onClick = {
+                    val navigate = Intent(context, Calibrate::class.java)
+                    context.startActivity(navigate)
+
+                }) {
+                    Text(text = "Next", fontSize = 18.sp)
                 }
             }
         }
