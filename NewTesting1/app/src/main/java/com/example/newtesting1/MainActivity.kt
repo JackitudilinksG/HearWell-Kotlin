@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,8 +43,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             NewTesting1Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "HearWell Technologies",
+                    UserTesting(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun UserTesting(modifier: Modifier = Modifier) {
     var side : String = "MIDDLE"
     var vol : Int = 0
     val displayVol = remember { mutableStateOf(50) }
@@ -63,12 +63,17 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = name,
+            text = "HearWell",
             modifier = modifier.padding(top = 32.dp),
-            style = TextStyle(
-                color = Color.Red
-            )
+            fontSize = 50.sp,
+            fontWeight = FontWeight(700)
         )
+        Text(
+            text = "Do not change device volume while testing",
+            fontSize = 10.sp,
+            fontWeight = FontWeight(200)
+        )
+
         Row {
             Button(onClick = { side = "LEFT" }) { Text("LEFT")}
             Button(onClick = {side = "MIDDLE"}) { Text("MIDDLE")}
@@ -99,14 +104,14 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
                 }
                 Button(onClick = { // Button 2
                     CoroutineScope(Dispatchers.IO).launch {
-                        playTone(500.0, 3000)
+                        playTone(500.0, 3000, volume = 1.0F, volumeBoost = vol.toFloat(), stereoSide = side)
                     }
                 }) {
                     Text("500Hz")
                 }
                 Button(onClick = { // Button 3
                     CoroutineScope(Dispatchers.IO).launch {
-                        playTone(1000.0, 3000)
+                        playTone(1000.0, 3000, volume = 1.0F, volumeBoost = vol.toFloat(), stereoSide = side)
                     }
                 }) {
                     Text("1kHz")
@@ -115,21 +120,21 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
             Row {
                 Button(onClick = { // Button 4
                     CoroutineScope(Dispatchers.IO).launch {
-                        playTone(2000.0, 3000)
+                        playTone(2000.0, 3000, volume = 1.0F, volumeBoost = vol.toFloat(), stereoSide = side)
                     }
                 }) {
                     Text("2kHz")
                 }
                 Button(onClick = { // Button 5
                     CoroutineScope(Dispatchers.IO).launch {
-                        playTone(4000.0, 3000)
+                        playTone(4000.0, 3000, volume = 1.0F, volumeBoost = vol.toFloat(), stereoSide = side)
                     }
                 }) {
                     Text("4kHz")
                 }
                 Button(onClick = { // Button 6
                     CoroutineScope(Dispatchers.IO).launch {
-                        playTone(8000.0, 3000)
+                        playTone(8000.0, 3000, volume = 1.0F, volumeBoost = vol.toFloat(), stereoSide = side)
                     }
                 }) {
                     Text("8kHz")
@@ -204,6 +209,6 @@ fun playTone(frequency: Double, durationMs: Int, sampleRate: Int = 44100, volume
 @Composable
 fun GreetingPreview() {
     NewTesting1Theme {
-        Greeting("Android")
+        UserTesting()
     }
 }
