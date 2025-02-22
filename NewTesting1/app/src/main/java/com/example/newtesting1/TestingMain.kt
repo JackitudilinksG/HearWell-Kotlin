@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.hearwell_06newtesting1.Audiogram
 import com.example.newtesting1.ui.theme.NewTesting1Theme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,11 +31,6 @@ import kotlinx.coroutines.launch
 import kotlin.math.PI
 import kotlin.math.sin
 
-/**
- * TestingMain is the main activity for testing frequencies.
- * We now call setVolumeControlStream(AudioManager.STREAM_MUSIC) in onCreate
- * so the hardware volume buttons control the music stream.
- */
 class TestingMain : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,30 +46,23 @@ class TestingMain : ComponentActivity() {
     }
 }
 
-/**
- * TestingMainScreen now includes an EarSelectionRow at the top, so the user can choose
- * between "Left Ear" and "Right Ear". The test then follows with frequency selection and adjustment.
- */
 @Composable
 fun TestingMainScreen(modifier: Modifier = Modifier) {
-    // List of frequencies to test.
     val frequencies = listOf(250.0, 500.0, 1000.0, 2000.0, 4000.0, 8000.0)
     val context = LocalContext.current
     val activity = context as? Activity
 
-    // Lists to store the measured volume (in dB) for each frequency.
     var leftResults by remember { mutableStateOf(List(frequencies.size) { null as Float? }) }
     var rightResults by remember { mutableStateOf(List(frequencies.size) { null as Float? }) }
 
-    // State variables to control the test flow.
-    var currentEar by remember { mutableStateOf("left") } // "left" or "right"
-    var phase by remember { mutableStateOf("select") }      // "select" or "adjust"
+    var currentEar by remember { mutableStateOf("left") }
+    var phase by remember { mutableStateOf("select") }
     var selectedIndex by remember { mutableStateOf<Int?>(null) }
-    var currentVolume by remember { mutableStateOf(0.5f) }    // Volume slider value (0f to 1f)
+    var currentVolume by remember { mutableStateOf(0.5f) }
 
     Box(modifier = modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
-            // Ear selection row is available during the frequency selection phase.
+
             if (phase == "select") {
                 EarSelectionRow(currentEar = currentEar, onEarSelected = { ear ->
                     currentEar = ear
@@ -88,16 +77,15 @@ fun TestingMainScreen(modifier: Modifier = Modifier) {
                         results = if (currentEar == "left") leftResults else rightResults,
                         onFrequencySelected = { index ->
                             selectedIndex = index
-                            currentVolume = 0.5f // Reset slider for new frequency
+                            currentVolume = 0.5f
                             phase = "adjust"
                         },
                         onTestComplete = {
                             if (currentEar == "left") {
-                                // If left ear test is complete, switch to right ear.
                                 currentEar = "right"
                                 phase = "select"
                             } else {
-                                // All tests complete: pass results to Audiogram activity.
+
                                 val leftData = leftResults.joinToString(separator = ",") { it.toString() }
                                 val rightData = rightResults.joinToString(separator = ",") { it.toString() }
                                 val freqData = frequencies.joinToString(separator = ",")
@@ -112,7 +100,7 @@ fun TestingMainScreen(modifier: Modifier = Modifier) {
                     )
                 }
                 "adjust" -> {
-                    // Display the volume adjustment UI for the selected frequency.
+
                     val freq = frequencies[selectedIndex!!]
                     VolumeAdjustmentScreen(
                         frequency = freq,
@@ -120,7 +108,6 @@ fun TestingMainScreen(modifier: Modifier = Modifier) {
                         currentVolume = currentVolume,
                         onVolumeChange = { newVolume ->
                             currentVolume = newVolume
-                            // Automatically play tone at new volume.
                             CoroutineScope(Dispatchers.IO).launch {
                                 playTone(
                                     frequency = freq,
@@ -159,7 +146,6 @@ fun TestingMainScreen(modifier: Modifier = Modifier) {
                 }
             }
         }
-        // Common Back button to exit the activity.
         Button(
             onClick = { activity?.finish() },
             modifier = Modifier.align(Alignment.BottomStart).padding(16.dp)
@@ -169,10 +155,6 @@ fun TestingMainScreen(modifier: Modifier = Modifier) {
     }
 }
 
-/**
- * EarSelectionRow provides two buttons for choosing the ear to test.
- * The currently selected ear is disabled.
- */
 @Composable
 fun EarSelectionRow(currentEar: String, onEarSelected: (String) -> Unit) {
     Row(
@@ -197,10 +179,6 @@ fun EarSelectionRow(currentEar: String, onEarSelected: (String) -> Unit) {
     }
 }
 
-/**
- * FrequencySelectionScreen displays a grid of frequency buttons.
- * Already tested frequencies are disabled.
- */
 @Composable
 fun FrequencySelectionScreen(
     frequencies: List<Double>,
@@ -215,7 +193,6 @@ fun FrequencySelectionScreen(
     ) {
         Text(text = "${ear.capitalize()} Ear Test", fontSize = 30.sp)
         Spacer(modifier = Modifier.height(16.dp))
-        // Arrange frequency buttons in a grid (2 rows x 3 columns).
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
             modifier = Modifier.height(200.dp),
@@ -223,7 +200,6 @@ fun FrequencySelectionScreen(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             itemsIndexed(frequencies) { index, freq ->
-                // Disable button if frequency has already been tested.
                 val tested = results[index] != null
                 Button(
                     onClick = { onFrequencySelected(index) },
@@ -235,7 +211,6 @@ fun FrequencySelectionScreen(
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
-        // When all frequencies are tested, show the Next/Finish button.
         if (results.all { it != null }) {
             Button(onClick = { onTestComplete() }) {
                 Text(if (ear == "left") "Next: Right Ear" else "Finish Test")
@@ -244,9 +219,6 @@ fun FrequencySelectionScreen(
     }
 }
 
-/**
- * VolumeAdjustmentScreen provides UI to adjust the volume for a selected frequency.
- */
 @Composable
 fun VolumeAdjustmentScreen(
     frequency: Double,
@@ -275,17 +247,10 @@ fun VolumeAdjustmentScreen(
     }
 }
 
-/**
- * sliderToDb converts a slider value (0.0 to 1.0) into a decibel level.
- */
 fun sliderToDb(value: Float): Float {
     return value * 80f - 80f
 }
 
-/**
- * playTone generates and plays a sine wave tone for a given frequency and duration.
- * It directs the output to the specified stereo channel.
- */
 fun playTone(
     frequency: Double,
     durationMs: Int,
