@@ -1,4 +1,4 @@
-package com.example.hearwell_06
+package com.example.newtesting1
 
 import android.app.Activity
 import android.content.Intent
@@ -18,13 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.hearwell_06.ui.theme.Hearwell_06Theme
+import com.example.newtesting1.ui.theme.NewTesting1Theme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Hearwell_06Theme {
+            NewTesting1Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     WelcomeScreen(modifier = Modifier.padding(innerPadding))
                 }

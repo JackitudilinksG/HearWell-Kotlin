@@ -1,5 +1,4 @@
-package com.example.hearwell_06
-
+package com.example.hearwell_06newtesting1
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
@@ -25,7 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.hearwell_06.ui.theme.Hearwell_06Theme
+import com.example.newtesting1.ui.theme.NewTesting1Theme
 
 /**
  * Audiogram Activity receives the measured volume (in dB) for left and right ears
@@ -42,7 +41,7 @@ class Audiogram : ComponentActivity() {
         val rightVolumes = rightData.split(",").mapNotNull { it.toFloatOrNull() }
         val frequencies = freqData.split(",").mapNotNull { it.toDoubleOrNull() }
         setContent {
-            Hearwell_06Theme {
+            NewTesting1Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     AudiogramScreen(
                         modifier = Modifier.padding(innerPadding),

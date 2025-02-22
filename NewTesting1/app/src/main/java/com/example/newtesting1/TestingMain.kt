@@ -1,4 +1,4 @@
-package com.example.hearwell_06
+package com.example.newtesting1
 
 import android.app.Activity
 import android.content.Intent
@@ -23,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.hearwell_06.ui.theme.Hearwell_06Theme
+import com.example.newtesting1.ui.theme.NewTesting1Theme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,7 +41,7 @@ class TestingMain : ComponentActivity() {
         // Allow user to fine-tune volume using the hardware volume buttons.
         setVolumeControlStream(AudioManager.STREAM_MUSIC)
         setContent {
-            Hearwell_06Theme {
+            NewTesting1Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     TestingMainScreen(modifier = Modifier.padding(innerPadding))
                 }
