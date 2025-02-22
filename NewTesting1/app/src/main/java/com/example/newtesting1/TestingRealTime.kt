@@ -15,9 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.newtesting1.ui.theme.NewTesting1Theme
-import android.media.*
-import kotlin.concurrent.thread
-import org.jtransforms.fft.DoubleFFT_1Dx
 
 class TestingRealTime : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
