@@ -1,6 +1,7 @@
 package com.example.newtesting1
 
 import android.app.Activity
+import android.content.Intent
 import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioTrack
@@ -8,6 +9,7 @@ import android.media.audiofx.LoudnessEnhancer
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -62,7 +64,7 @@ fun TestingScreen(modifier: Modifier = Modifier) {
             Text("Do not change device volume while testing", fontSize = 10.sp)
             Row {
                 Button(onClick = { side = "LEFT" }) { Text("LEFT") }
-                Button(onClick = { side = "MIDDLE" }) { Text("MIDDLE") }
+                Button(onClick = { side = "MIDDLE" }, modifier = Modifier.padding(start = 10.dp, end = 10.dp)) { Text("MIDDLE") }
                 Button(onClick = { side = "RIGHT" }) { Text("RIGHT") }
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -73,7 +75,9 @@ fun TestingScreen(modifier: Modifier = Modifier) {
                 }
             }
             Column {
-                Row {
+                Row(
+                    horizontalArrangement = Arrangement.Center
+                ) {
                     Button(onClick = {
                         CoroutineScope(Dispatchers.IO).launch {
                             playTone(250.0, 3000, volume = 1.0F, volumeBoost = vol.toFloat(), stereoSide = side)
@@ -83,7 +87,7 @@ fun TestingScreen(modifier: Modifier = Modifier) {
                         CoroutineScope(Dispatchers.IO).launch {
                             playTone(500.0, 3000, volume = 1.0F, volumeBoost = vol.toFloat(), stereoSide = side)
                         }
-                    }) { Text("500Hz") }
+                    }, modifier = Modifier.padding(start = 10.dp, end = 10.dp)) { Text("500Hz") }
                     Button(onClick = {
                         CoroutineScope(Dispatchers.IO).launch {
                             playTone(1000.0, 3000, volume = 1.0F, volumeBoost = vol.toFloat(), stereoSide = side)
@@ -100,16 +104,22 @@ fun TestingScreen(modifier: Modifier = Modifier) {
                         CoroutineScope(Dispatchers.IO).launch {
                             playTone(4000.0, 3000, volume = 1.0F, volumeBoost = vol.toFloat(), stereoSide = side)
                         }
-                    }) { Text("4kHz") }
+                    }, modifier = Modifier.padding(start = 10.dp, end = 10.dp)) { Text("4kHz") }
                     Button(onClick = {
                         CoroutineScope(Dispatchers.IO).launch {
                             playTone(8000.0, 3000, volume = 1.0F, volumeBoost = vol.toFloat(), stereoSide = side)
                         }
                     }) { Text("8kHz") }
                 }
+                Button( onClick = {
+                    val intent = Intent(context, TestingRealTime::class.java)
+                    context.startActivity(intent)
+                }) {
+                    Text("RealTime")
+                }
             }
         }
-        // Back button at bottom left
+
         Button(
             onClick = { activity?.finish() },
             modifier = Modifier.align(Alignment.BottomStart).padding(16.dp)
