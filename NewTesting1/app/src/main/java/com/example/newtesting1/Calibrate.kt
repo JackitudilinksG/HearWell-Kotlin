@@ -83,3 +83,4 @@ fun CalibrationScreen(modifier: Modifier = Modifier, onPlaySound: () -> Unit) {
         }
     }
 }
+

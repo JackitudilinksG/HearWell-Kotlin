@@ -204,3 +204,4 @@ fun saveBitmapToGallery(bitmap: Bitmap, context: Context): Boolean {
         false
     }
 }
+
