@@ -1,5 +1,8 @@
 [versions]
+accompanistCoil = "0.11.1"
 agp = "8.8.1"
+coilSvg = "1.1.1"
+jtransforms = "3.1"
 kotlin = "2.0.0"
 coreKtx = "1.10.1"
 junit = "4.13.2"
@@ -10,7 +13,10 @@ activityCompose = "1.8.0"
 composeBom = "2024.04.01"
 
 [libraries]
+accompanist-coil = { module = "com.google.accompanist:accompanist-coil", version.ref = "accompanistCoil" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+coil-svg = { module = "io.coil-kt:coil-svg", version.ref = "coilSvg" }
+jtransforms = { module = "com.github.wendykierp:JTransforms", version.ref = "jtransforms" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

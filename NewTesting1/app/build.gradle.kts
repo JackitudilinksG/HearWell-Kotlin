@@ -56,5 +56,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation("com.github.wendykierp:JTransforms:3.1")
+    implementation(libs.jtransforms)
+    implementation(libs.accompanist.coil)
+    implementation(libs.coil.svg)
 }

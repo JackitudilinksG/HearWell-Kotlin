@@ -16,9 +16,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.newtesting1.ui.theme.NewTesting1Theme
+import customFont
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,8 +45,15 @@ fun WelcomeScreen(modifier: Modifier = Modifier) {
             modifier = Modifier.align(Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Welcome to HearWell Technologies", fontSize = 30.sp)
-            Button(onClick = {
+            Text("HearWell", fontSize = 70.sp, style = TextStyle(
+                fontFamily = customFont,
+                fontWeight = FontWeight.Normal
+            ))
+            Svg(
+                painter = painterResource(id = R.drawable.icon),
+                contentDescription = "SVG Icon",
+                modifier = Modifier.size(100.dp)
+            )            Button(onClick = {
                 val intent = Intent(context, Calibrate::class.java)
                 context.startActivity(intent)
             }) {
