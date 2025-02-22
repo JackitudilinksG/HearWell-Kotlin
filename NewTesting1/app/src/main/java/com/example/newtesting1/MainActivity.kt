@@ -1,5 +1,6 @@
 package com.example.newtesting1
 
+import android.content.Intent
 import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioTrack
@@ -23,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -140,14 +142,13 @@ fun UserTesting(modifier: Modifier = Modifier) {
                 }) {
                     Text("8kHz")
                 }
+            }
+            Button(onClick = {
+                val navigate = Intent(context, Calibrate::class.java)
+                context.startActivity(navigate)
 
-                Button(onClick = {
-                    val navigate = Intent(context, Calibrate::class.java)
-                    context.startActivity(navigate)
-
-                }) {
-                    Text(text = "Next", fontSize = 18.sp)
-                }
+            }) {
+                Text(text = "Next", fontSize = 18.sp)
             }
         }
     }
