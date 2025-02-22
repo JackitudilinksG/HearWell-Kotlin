@@ -1,4 +1,4 @@
-package com.example.newtesting1
+package com.example.hearwell_06
 
 import android.app.Activity
 import android.content.Intent
@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.newtesting1.ui.theme.NewTesting1Theme
+import com.example.hearwell_06.ui.theme.Hearwell_06Theme
 
 class Calibrate : ComponentActivity() {
     private lateinit var mySound: MediaPlayer
@@ -37,7 +37,7 @@ class Calibrate : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            NewTesting1Theme {
+            Hearwell_06Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     CalibrationScreen(
                         modifier = Modifier.padding(innerPadding),
