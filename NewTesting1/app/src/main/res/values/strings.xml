@@ -2,4 +2,6 @@
     <string name="app_name">NewTesting1</string>
     <string name="title_activity_calibrate">Calibrate</string>
     <string name="title_activity_login">Login</string>
+    <string name="title_activity_testing_real_time">TestingRealTime</string>
+    <string name="title_activity_testing_main">TestingMain</string>
 </resources>

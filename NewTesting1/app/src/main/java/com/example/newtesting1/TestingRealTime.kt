@@ -1,6 +1,5 @@
-package com.example.hearwell_06
+package com.example.newtesting1
 
-import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,65 +8,51 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
-import com.example.newtesting1.R
 import com.example.newtesting1.ui.theme.NewTesting1Theme
+import android.media.*
+import kotlin.concurrent.thread
+import org.jtransforms.fft.DoubleFFT_1Dx
 
-class Calibrate : ComponentActivity() {
-    private lateinit var mySound: MediaPlayer
-
+class TestingRealTime : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Initialize the media player with the audio resource
-        mySound = MediaPlayer.create(this, R.raw.calibrate)
-
         enableEdgeToEdge()
         setContent {
             NewTesting1Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    UserCalibrate(
-                        modifier = Modifier.padding(innerPadding),
-                        onPlaySound = { mySound.start() } // Lambda to play sound
+                    RealTime(
+                        modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mySound.release() // Release media player resources
-    }
 }
 
 @Composable
-fun UserCalibrate(modifier: Modifier = Modifier, onPlaySound: () -> Unit) {
+fun RealTime(modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier,
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Let’s get your volume set to the correct levels.",
-            fontSize = 20.sp
+            text = "Hello",
+            modifier = modifier
         )
-        Button(onClick = { onPlaySound() }) {
-            Text("Play Sound")
-        }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun CalibratePreview() {
+fun GreetingPreview2() {
     NewTesting1Theme {
-        UserCalibrate(onPlaySound = {})
+        RealTime()
     }
 }

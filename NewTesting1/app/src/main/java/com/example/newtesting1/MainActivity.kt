@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.hearwell_06.Calibrate
 import com.example.newtesting1.ui.theme.NewTesting1Theme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -148,7 +149,14 @@ fun UserTesting(modifier: Modifier = Modifier) {
                 context.startActivity(navigate)
 
             }) {
-                Text(text = "Next", fontSize = 18.sp)
+                Text(text = "Calibrate", fontSize = 18.sp)
+            }
+            Button(onClick = {
+                val navigate = Intent(context, TestingRealTime::class.java)
+                context.startActivity(navigate)
+
+            }) {
+                Text(text = "RealTime", fontSize = 18.sp)
             }
         }
     }
