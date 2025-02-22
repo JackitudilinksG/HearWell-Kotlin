@@ -29,10 +29,8 @@ class Calibrate : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Ensure volume buttons control media volume
         setVolumeControlStream(AudioManager.STREAM_MUSIC)
 
-        // Initialize the media player with the calibration audio resource
         mySound = MediaPlayer.create(this, R.raw.calibrate)
 
         enableEdgeToEdge()
@@ -74,7 +72,6 @@ fun CalibrationScreen(modifier: Modifier = Modifier, onPlaySound: () -> Unit) {
                 Text("Continue to Testing", fontSize = 18.sp)
             }
         }
-        // Back button at bottom left
         Button(
             onClick = { activity?.finish() },
             modifier = Modifier.align(Alignment.BottomStart).padding(16.dp)

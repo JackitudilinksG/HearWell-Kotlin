@@ -36,7 +36,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun WelcomeScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    // Cast context to Activity so we can finish() it when Back is pressed.
     val activity = context as? Activity
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -51,7 +50,6 @@ fun WelcomeScreen(modifier: Modifier = Modifier) {
                 Text("Get Started")
             }
         }
-        // Back button at bottom left
         Button(
             onClick = { activity?.finish() },
             modifier = Modifier.align(Alignment.BottomStart).padding(16.dp)
