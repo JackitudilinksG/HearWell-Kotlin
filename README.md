@@ -1,2 +1,2 @@
 # HearWell
-Repository for the HearWell Project.
+Repository for Internet Exploere's HearWell Project.
