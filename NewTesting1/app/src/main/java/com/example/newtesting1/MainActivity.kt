@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun WelcomeScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    val activity = context as? Activity
+    context as? Activity
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier.align(Alignment.Center),
@@ -76,10 +76,9 @@ fun WelcomeScreen(modifier: Modifier = Modifier) {
                 fontWeight = FontWeight.ExtraLight,
             ))
             Button(onClick = {
-                val intent = Intent(context, Calibrate::class.java)
+                val intent = Intent(context, HomePage::class.java)
                 context.startActivity(intent)
-            },
-                modifier = Modifier.padding(top = 350.dp, bottom = 25.dp)
+            }, modifier = Modifier.padding(top = 350.dp, bottom = 25.dp)
                     .size(250.dp, 35.dp)
                     .border(
                         BorderStroke(2.dp, Color.Black), // Border color and width
@@ -91,7 +90,10 @@ fun WelcomeScreen(modifier: Modifier = Modifier) {
             ),) {
                 Text("I ALREADY HAVE AN ACCOUNT")
             }
-            Button(onClick = {}, modifier = Modifier.size(250.dp, 40.dp)
+            Button(onClick = {
+                val intent = Intent(context, Calibrate::class.java)
+                context.startActivity(intent)
+            }, modifier = Modifier.size(250.dp, 40.dp)
                 .border(
                     BorderStroke(0.dp, Color.Black), // Border color and width
                     shape = RoundedCornerShape(15.dp)
