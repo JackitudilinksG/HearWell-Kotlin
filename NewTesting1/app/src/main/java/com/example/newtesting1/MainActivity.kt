@@ -64,7 +64,7 @@ fun WelcomeScreen(modifier: Modifier = Modifier) {
             Image(
                 painter = painter,
                 contentDescription = "SVG Example",
-                modifier = Modifier.size(100.dp)
+                modifier = Modifier.size(150.dp)
             )
             Text(
                 modifier = Modifier.padding(top = 20.dp),
