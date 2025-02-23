@@ -34,13 +34,10 @@ import kotlin.math.sin
 class TestingMain : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Allow user to fine-tune volume using the hardware volume buttons.
         setVolumeControlStream(AudioManager.STREAM_MUSIC)
         setContent {
             NewTesting1Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    TestingMainScreen(modifier = Modifier.padding(innerPadding))
-                }
+                TestingMainScreen()
             }
         }
     }
