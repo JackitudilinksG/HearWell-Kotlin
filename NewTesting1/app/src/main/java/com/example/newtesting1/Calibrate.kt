@@ -8,13 +8,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,9 +59,13 @@ fun CalibrationScreen(modifier: Modifier = Modifier, onPlaySound: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text("Let’s get your volume set to the correct levels.", fontSize = 20.sp)
+
+            // Play Sound Button with Icon
             Button(onClick = { onPlaySound() }) {
+                Icon(imageVector = Icons.Filled.VolumeUp, contentDescription = "Play Sound", modifier = Modifier.padding(end = 8.dp))
                 Text("Play Calibration Sound")
             }
+
             Button(onClick = {
                 val intent = Intent(context, TestingMain::class.java)
                 context.startActivity(intent)
@@ -80,4 +81,3 @@ fun CalibrationScreen(modifier: Modifier = Modifier, onPlaySound: () -> Unit) {
         }
     }
 }
-
