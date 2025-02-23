@@ -10,17 +10,23 @@ import android.media.audiofx.LoudnessEnhancer
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hearwell_06newtesting1.Audiogram
@@ -97,7 +103,6 @@ fun TestingMainScreen(modifier: Modifier = Modifier) {
                     )
                 }
                 "adjust" -> {
-
                     val freq = frequencies[selectedIndex!!]
                     VolumeAdjustmentScreen(
                         frequency = freq,
@@ -129,7 +134,6 @@ fun TestingMainScreen(modifier: Modifier = Modifier) {
                             }
                         },
                         onSetVolume = {
-                            // Convert the slider value to decibels and record it.
                             val volumeDb = sliderToDb(currentVolume)
                             if (currentEar == "left") {
                                 leftResults = leftResults.toMutableList().also { it[selectedIndex!!] = volumeDb }
@@ -154,25 +158,24 @@ fun TestingMainScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun EarSelectionRow(currentEar: String, onEarSelected: (String) -> Unit) {
+    val painterLeft = painterResource(id = R.drawable.ear_left)
+    val painterRight = painterResource(id = R.drawable.ear_right)
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(top = 50.dp),
         horizontalArrangement = Arrangement.Center
     ) {
-        Button(
-            onClick = { onEarSelected("left") },
-            enabled = currentEar != "left"
-        ) {
-            Text("Left Ear")
-        }
-        Spacer(modifier = Modifier.width(16.dp))
-        Button(
-            onClick = { onEarSelected("right") },
-            enabled = currentEar != "right"
-        ) {
-            Text("Right Ear")
-        }
+        Image(
+            painter = painterLeft,
+            contentDescription = "Left Ear",
+            modifier = Modifier.size(150.dp).clickable { onEarSelected("left") }
+        )
+        Image(
+            painter = painterRight,
+            contentDescription = "Right Ear",
+            modifier = Modifier.size(150.dp).clickable { onEarSelected("right"); }
+        )
     }
 }
 

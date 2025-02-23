@@ -59,11 +59,10 @@ fun WelcomeScreen(modifier: Modifier = Modifier) {
                 fontFamily = customFont,
                 fontWeight = FontWeight.Normal
             ))
-            //vector asset made from svg
             val painter = painterResource(id = R.drawable.logo)
             Image(
                 painter = painter,
-                contentDescription = "SVG Example",
+                contentDescription = "Logo",
                 modifier = Modifier.size(150.dp)
             )
             Text(
