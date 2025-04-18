@@ -161,10 +161,13 @@ fun AudiogramScreen(
         }
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = { activity?.finish() },
+            onClick = {
+                val intent = Intent(context, AudioTest::class.java)
+                context.startActivity(intent)
+            },
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
-            Text("Back")
+            Text("Test Audio Settings")
         }
     }
 }

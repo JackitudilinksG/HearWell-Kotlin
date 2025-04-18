@@ -256,15 +256,42 @@ fun playTone(
     frequency: Double,
     durationMs: Int,
     sampleRate: Int = 44100,
-    volume: Float = 0.5F,
-    volumeBoost: Float = 0.0F,
+    volume: Float = 0.5f,
+    volumeBoost: Float = 0.0f,
     stereoSide: String = "MIDDLE"
 ) {
-    val minBuffSize = AudioTrack.getMinBufferSize(
-        sampleRate,
-        AudioFormat.CHANNEL_OUT_MONO,
-        AudioFormat.ENCODING_PCM_16BIT
-    )
+    val numSamples = (durationMs * sampleRate / 1000).toInt()
+    val fadeSamples = 100 // Samples for fade in/out
+    val audioData = ShortArray(numSamples * 2) // Stereo (2 channels)
+
+    for (i in 0 until numSamples) {
+        // Apply fade-in and fade-out to prevent clicks
+        val fadeFactor = when {
+            i < fadeSamples -> i.toDouble() / fadeSamples
+            i >= numSamples - fadeSamples -> (numSamples - i).toDouble() / fadeSamples
+            else -> 1.0
+        }
+        val angle = 2.0 * PI * i * frequency / sampleRate
+        val sample = (sin(angle) * Short.MAX_VALUE * fadeFactor * volume).toInt().toShort()
+
+        when (stereoSide.uppercase()) {
+            "LEFT" -> {
+                audioData[i * 2] = sample     // Left channel
+                audioData[i * 2 + 1] = 0      // Right channel (silent)
+            }
+            "RIGHT" -> {
+                audioData[i * 2] = 0          // Left channel (silent)
+                audioData[i * 2 + 1] = sample // Right channel
+            }
+            else -> { // MIDDLE
+                audioData[i * 2] = sample     // Left channel
+                audioData[i * 2 + 1] = sample // Right channel
+            }
+        }
+    }
+
+    val bufferSize = audioData.size * 2 // 2 bytes per Short
+
     val player = AudioTrack.Builder()
         .setAudioAttributes(
             AudioAttributes.Builder()
@@ -276,34 +303,27 @@ fun playTone(
             AudioFormat.Builder()
                 .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
                 .setSampleRate(sampleRate)
-                .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
+                .setChannelMask(AudioFormat.CHANNEL_OUT_STEREO)
                 .build()
         )
-        .setBufferSizeInBytes(minBuffSize * 4)
-        .setTransferMode(AudioTrack.MODE_STREAM)
+        .setBufferSizeInBytes(bufferSize)
+        .setTransferMode(AudioTrack.MODE_STATIC)
         .build()
-    player.setVolume(volume)
-    val enhancer = LoudnessEnhancer(player.audioSessionId)
-    enhancer.setTargetGain(volumeBoost.toInt())
-    enhancer.enabled = true
-    when (stereoSide) {
-        "MIDDLE" -> player.setStereoVolume(1.0F, 1.0F)
-        "LEFT" -> player.setStereoVolume(1.0F, 0.0F)
-        "RIGHT" -> player.setStereoVolume(0.0F, 1.0F)
+
+    player.write(audioData, 0, audioData.size, AudioTrack.WRITE_BLOCKING)
+
+    val enhancer = LoudnessEnhancer(player.audioSessionId).apply {
+        setTargetGain(volumeBoost.toInt())
+        enabled = true
     }
+
     player.play()
-    val numSamples = (durationMs * sampleRate / 1000)
-    val audioData = ShortArray(minBuffSize)
-    var sampleIndex = 0
-    while (sampleIndex < numSamples) {
-        for (i in audioData.indices) {
-            if (sampleIndex >= numSamples) break
-            audioData[i] = (Short.MAX_VALUE * sin(2.0 * PI * sampleIndex * frequency / sampleRate)).toInt().toShort()
-            sampleIndex++
-        }
-        player.write(audioData, 0, audioData.size)
-    }
+
+    // Keep the coroutine alive until playback finishes
+    Thread.sleep(durationMs.toLong())
+
     player.stop()
     player.release()
+    enhancer.release()
 }
 
