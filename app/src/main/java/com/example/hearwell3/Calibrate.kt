@@ -19,8 +19,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.hearwell.R
-import com.example.hearwell.TestingMain
 import com.example.hearwell.ui.theme.HearWellTheme
 
 class Calibrate : ComponentActivity() {
@@ -56,13 +54,16 @@ class Calibrate : ComponentActivity() {
 fun CalibrationScreen(modifier: Modifier = Modifier, onPlaySound: () -> Unit) {
     val context = LocalContext.current
     val activity = context as? Activity
+    
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier.align(Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Let’s get your volume set to the correct levels.",
-                modifier = Modifier.fillMaxWidth().padding(bottom = 15.dp),
+            Text("Let's get your volume set to the correct levels.",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 15.dp),
                 textAlign = TextAlign.Center,
                 fontSize = 20.sp
             )
@@ -82,7 +83,9 @@ fun CalibrationScreen(modifier: Modifier = Modifier, onPlaySound: () -> Unit) {
         }
         Button(
             onClick = { activity?.finish() },
-            modifier = Modifier.align(Alignment.BottomStart).padding(16.dp)
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(16.dp)
         ) {
             Text("Back")
         }
