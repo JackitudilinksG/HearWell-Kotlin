@@ -3,6 +3,7 @@ package com.example.hearwell
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
@@ -23,11 +24,34 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hearwell.ui.theme.HearWellTheme
 import androidx.core.graphics.createBitmap
+
+data class EarCalibration(
+    val frequencies: List<Float> // Stores actual volume levels for each frequency
+)
+
+fun saveCalibration(context: Context, leftEar: EarCalibration, rightEar: EarCalibration) {
+    val sharedPref = context.getSharedPreferences("CalibrationPrefs", Context.MODE_PRIVATE)
+    with(sharedPref.edit()) {
+        putString("LeftEar", leftEar.frequencies.joinToString(","))
+        putString("RightEar", rightEar.frequencies.joinToString(","))
+        apply()
+    }
+}
+
+fun loadCalibration(context: Context): Pair<EarCalibration, EarCalibration> {
+    val sharedPref = context.getSharedPreferences("CalibrationPrefs", Context.MODE_PRIVATE)
+    val left = sharedPref.getString("LeftEar", "50.0,50.0,50.0,50.0,50.0,50.0")
+    val right = sharedPref.getString("RightEar", "50.0,50.0,50.0,50.0,50.0,50.0")
+    val leftList = left!!.split(",").map { it.toFloat() }
+    val rightList = right!!.split(",").map { it.toFloat() }
+    return EarCalibration(leftList) to EarCalibration(rightList)
+}
 
 /**
  * Audiogram Activity receives the measured volume (in dB) for left and right ears
@@ -44,6 +68,13 @@ class Audiogram : ComponentActivity() {
         val leftVolumes = leftData.split(",").mapNotNull { it.toFloatOrNull() }
         val rightVolumes = rightData.split(",").mapNotNull { it.toFloatOrNull() }
         val frequencies = freqData.split(",").mapNotNull { it.toDoubleOrNull() }
+
+        // Save the actual volume levels to SharedPreferences
+        saveCalibration(this, 
+            EarCalibration(leftVolumes.map { it.toFloat() }),
+            EarCalibration(rightVolumes.map { it.toFloat() })
+        )
+
         setContent {
             HearWellTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -91,6 +122,27 @@ fun AudiogramScreen(
             rightVolumes = rightVolumes,
             modifier = Modifier.fillMaxWidth().height(300.dp)
         )
+        Spacer(modifier = Modifier.height(16.dp))
+        /*
+        Button(
+            onClick = {
+                val message = buildString {
+                    append("Left Ear Values:\n")
+                    leftVolumes.forEachIndexed { index, value ->
+                        append("${frequencies[index]} Hz: ${value} dB\n")
+                    }
+                    append("\nRight Ear Values:\n")
+                    rightVolumes.forEachIndexed { index, value ->
+                        append("${frequencies[index]} Hz: ${value} dB\n")
+                    }
+                }
+                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+            },
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        ) {
+            Text("Show Current Values")
+        }
+         */
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
@@ -152,6 +204,7 @@ fun GraphView(
         // Normalize dB values (assumed between -80 and 0 dB) to [0,1].
         fun normalizeDb(db: Float): Float = (db + 80f) / 80f
         val yScale = (canvasHeight - 60f)
+        
         // Draw left ear graph in red.
         var prevPoint: Offset? = null
         frequencies.forEachIndexed { index, freq ->
@@ -159,12 +212,29 @@ fun GraphView(
             val norm = normalizeDb(leftVolumes.getOrElse(index) { -80f })
             val y = canvasHeight - 40f - norm * yScale
             val currentPoint = Offset(x, y)
+            
+            // Draw point
             drawCircle(color = Color.Red, radius = 6f, center = currentPoint)
+            
+            // Draw value label for left ear
+            drawContext.canvas.nativeCanvas.apply {
+                drawText(
+                    "${freq.toInt()}Hz: ${leftVolumes.getOrElse(index) { -80f }.toInt()}dB",
+                    x + 10f,
+                    y - 10f,
+                    android.graphics.Paint().apply {
+                        color = android.graphics.Color.RED
+                        textSize = 30f
+                    }
+                )
+            }
+            
             if (prevPoint != null) {
                 drawLine(color = Color.Red, start = prevPoint!!, end = currentPoint, strokeWidth = 4f)
             }
             prevPoint = currentPoint
         }
+        
         // Draw right ear graph in blue.
         prevPoint = null
         frequencies.forEachIndexed { index, freq ->
@@ -172,7 +242,23 @@ fun GraphView(
             val norm = normalizeDb(rightVolumes.getOrElse(index) { -80f })
             val y = canvasHeight - 40f - norm * yScale
             val currentPoint = Offset(x, y)
+            
+            // Draw point
             drawCircle(color = Color.Blue, radius = 6f, center = currentPoint)
+            
+            // Draw value label for right ear
+            drawContext.canvas.nativeCanvas.apply {
+                drawText(
+                    "${freq.toInt()}Hz: ${rightVolumes.getOrElse(index) { -80f }.toInt()}dB",
+                    x + 10f,
+                    y + 30f,
+                    android.graphics.Paint().apply {
+                        color = android.graphics.Color.BLUE
+                        textSize = 30f
+                    }
+                )
+            }
+            
             if (prevPoint != null) {
                 drawLine(color = Color.Blue, start = prevPoint!!, end = currentPoint, strokeWidth = 4f)
             }
