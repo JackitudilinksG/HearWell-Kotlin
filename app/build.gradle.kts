@@ -87,3 +87,4 @@ dependencies {
     // Data Binding dependencies
     implementation("androidx.databinding:databinding-runtime:8.2.2")
 }
+}
