@@ -44,7 +44,13 @@ android {
         // Match the version declared above
         kotlinCompilerExtensionVersion = "1.5.15"
     }
-}
+    externalNativeBuild {
+        cmake {
+            path 'app/src/main/jni/cpp/CMakeLists.txt'// Adjust path as needed
+            version '3.4.1' // Specify the CMake version
+        }
+
+    }
 
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")

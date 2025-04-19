@@ -19,17 +19,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StampedPathEffectStyle.Companion.Translate
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.hearwell.R
 import com.example.hearwell.ui.theme.HearWellTheme
 import customFont
 import kotlinx.coroutines.launch
 import androidx.compose.ui.platform.LocalContext
+import org.apache.commons.math3.geometry.spherical.twod.Circle
+import kotlin.jvm.java
 
 class HomePage : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,6 +74,30 @@ fun HomePageFun(name: String) {
             modifier = Modifier.align(Alignment.Start).padding(start = 5.dp)
         )
         HearingTestCard()
+        SpeakButton()
+    }
+}
+
+@Composable
+fun SpeakButton() {
+    val context = LocalContext.current
+    val activity = remember { context as? Activity }
+
+    Card(
+        onClick = {
+            val intent = Intent(context, Translate::class.java)
+            context.startActivity(intent)
+        },
+        shape = RoundedCornerShape(200.dp),
+        modifier = Modifier
+            .size(300.dp)
+            .padding(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF1E2244)), // Dark Blue Background
+        elevation = CardDefaults.cardElevation(8.dp)
+    ) {
+        Box(
+            modifier = Modifier.padding(12.dp)
+        )
     }
 }
 
