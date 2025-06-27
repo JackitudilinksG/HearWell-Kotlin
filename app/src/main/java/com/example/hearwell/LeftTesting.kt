@@ -1,6 +1,7 @@
 package com.example.hearwell
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -34,6 +35,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.sp
+import com.example.hearwell.R
+import com.example.hearwell.RightTesting
 import com.example.hearwell.ui.theme.HearWellTheme
 import kotlinx.coroutines.launch
 
@@ -90,7 +93,7 @@ fun LeftFrequencyItemCard(frequency: LeftFrequencyItem, onClick: () -> Unit, mod
 }
 
 @Composable
-fun LeftFrequencySelectorLazyRow() {
+fun LeftFrequencySelectorLazyRow(): Map<Int, Int> {
     val volumeMap = remember {
         mutableStateMapOf(
             125 to 10,
@@ -271,6 +274,7 @@ fun LeftFrequencySelectorLazyRow() {
             )
         }
     }
+    return volumeMap
 }
 
 @Composable
@@ -287,9 +291,12 @@ fun LeftTestingPage() {
             painter = painterResource(id = R.drawable.background_image),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         )
+
+        val orderedFrequencies = listOf(125, 250, 500, 1000, 2000, 4000, 8000)
+        var leftVolumeMap: Map<Int, Int> by remember { mutableStateOf(emptyMap()) }
+
         Column(
             verticalArrangement = Arrangement.Top,
             modifier = Modifier
@@ -315,8 +322,10 @@ fun LeftTestingPage() {
                     lineHeight = 22.sp,
                 )
             )
-            LeftFrequencySelectorLazyRow()
+
+            leftVolumeMap = LeftFrequencySelectorLazyRow()
         }
+
         Button(
             onClick = { activity?.finish() },
             modifier = Modifier
@@ -326,8 +335,14 @@ fun LeftTestingPage() {
         ) {
             Text("Back")
         }
+
         Button(
-            onClick = { activity?.finish() },
+            onClick = {
+                val leftVolumes = orderedFrequencies.map { leftVolumeMap[it] ?: 0 }
+                val intent = Intent(context, RightTesting::class.java)
+                intent.putExtra("leftVolumes", leftVolumes.toIntArray())
+                context.startActivity(intent)
+            },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp),

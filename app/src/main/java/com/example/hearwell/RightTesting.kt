@@ -1,6 +1,9 @@
 package com.example.hearwell
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -15,6 +18,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,12 +26,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.sp
 import com.example.hearwell.ui.theme.HearWellTheme
 import kotlinx.coroutines.launch
@@ -35,10 +41,14 @@ import kotlinx.coroutines.launch
 class RightTesting : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Calling leftVolumes
+        val leftVolumes = intent.getIntArrayExtra("leftVolumes")
+
         enableEdgeToEdge()
         setContent {
             HearWellTheme {
-                RightTestingPage()
+                RightTestingPage(leftVolumes = leftVolumes)
             }
         }
     }
@@ -85,7 +95,7 @@ fun RightFrequencyItemCard(frequency: RightFrequencyItem, onClick: () -> Unit, m
 }
 
 @Composable
-fun RightFrequencySelectorLazyRow() {
+fun RightFrequencySelectorLazyRow(): Map<Int, Int> {
     val volumeMap = remember {
         mutableStateMapOf(
             125 to 10,
@@ -110,10 +120,8 @@ fun RightFrequencySelectorLazyRow() {
         )
     }
 
-    val density = LocalDensity.current
-
     // State to hold the currently selected frequency index
-    var selectedFrequencyIndex by remember { mutableStateOf(0) }
+    var selectedFrequencyIndex by remember { mutableIntStateOf(0) }
     val currentFreq = frequencies[selectedFrequencyIndex].hz
 
     // Update the `isSelected` state for the list based on `selectedFrequencyIndex`
@@ -129,12 +137,11 @@ fun RightFrequencySelectorLazyRow() {
     val lazyListState = rememberLazyListState()
 
     // Used to measure the width of the LazyRow container and individual items
-    var lazyRowWidthPx by remember { mutableStateOf(0) }
-    var itemWidthPx by remember { mutableStateOf(0) } // Assuming all items have similar width
+    var lazyRowWidthPx by remember { mutableIntStateOf(0) }
+    var itemWidthPx by remember { mutableIntStateOf(0) } // Assuming all items have similar width
 
     // Coroutine scope for launching scroll actions
     val coroutineScope = rememberCoroutineScope()
-    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
 
     Column(
         modifier = Modifier
@@ -146,7 +153,8 @@ fun RightFrequencySelectorLazyRow() {
             state = lazyListState,
             horizontalArrangement = Arrangement.spacedBy(18.dp),
             modifier = Modifier
-                .fillMaxWidth().height(450.dp)
+                .fillMaxWidth()
+                .height(450.dp)
                 .padding(top = 16.dp, bottom = 16.dp)
                 .background(Color.Transparent)
                 .onGloballyPositioned { coordinates ->
@@ -219,6 +227,7 @@ fun RightFrequencySelectorLazyRow() {
             Button(
                 onClick = {
                     volumeMap[currentFreq] = maxOf((volumeMap[currentFreq] ?: 0) + 5, 0)
+                    Log.d("volumeMap", volumeMap.toMap().toString())
                 },
                 shape = RoundedCornerShape(6),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF2F2F2)),
@@ -238,11 +247,41 @@ fun RightFrequencySelectorLazyRow() {
                 )
             }
         }
+        Box(
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .clip(RoundedCornerShape(15.dp))
+                .background(color = Color(0xFF161A36))
+        ) {
+            val currentVolume = volumeMap[currentFreq] ?: 0
+            val statusText = when {
+                currentVolume in 0..20 -> Pair("0–20dB is considered ", "normal" to Color(0xFF31E157))
+                currentVolume in 21..40 -> Pair("20–40dB is considered ", "moderate" to Color(0xFFDEE131))
+                currentVolume > 40 -> Pair("40+dB is considered ", "severe" to Color(0xFFFF0000))
+                else -> Pair("", "Error has occurred" to Color.Gray)
+            }
+            Text(
+                text = buildAnnotatedString {
+                    append(statusText.first)
+                    withStyle(style = SpanStyle(color = statusText.second.second, fontWeight = FontWeight.SemiBold)) {
+                        append(statusText.second.first)
+                    }
+                },
+                fontWeight = FontWeight.SemiBold,
+                letterSpacing = 0.sp,
+                color = Color(0xFFF2F2F2),
+                modifier = Modifier.padding(start = 30.dp, end = 30.dp, top = 8.dp, bottom = 8.dp)
+            )
+        }
     }
+    return volumeMap
 }
 
 @Composable
-fun RightTestingPage() {
+fun RightTestingPage(leftVolumes: IntArray?) {
+    val context = LocalContext.current
+    val activity = context as? Activity
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -255,6 +294,10 @@ fun RightTestingPage() {
             modifier = Modifier
                 .fillMaxSize()
         )
+
+        val orderedFrequencies = listOf(125, 250, 500, 1000, 2000, 4000, 8000)
+        var rightVolumeMap: Map<Int, Int> by remember { mutableStateOf(emptyMap()) }
+
         Column(
             verticalArrangement = Arrangement.Top,
             modifier = Modifier
@@ -263,7 +306,7 @@ fun RightTestingPage() {
                 .fillMaxSize()
         ) {
             Text(
-                text = "Left Ear Side Testing",
+                text = "Right Ear Side Testing",
                 fontSize = 48.sp,
                 style = TextStyle(
                     fontWeight = FontWeight.SemiBold,
@@ -280,7 +323,34 @@ fun RightTestingPage() {
                     lineHeight = 22.sp,
                 )
             )
-            RightFrequencySelectorLazyRow()
+            rightVolumeMap = RightFrequencySelectorLazyRow()
+        }
+
+        val rightVolumes = orderedFrequencies.map{rightVolumeMap[it]?:0}
+
+        Button(
+            onClick = { activity?.finish() },
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(16.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF161A36))
+        ) {
+            Text("Back")
+        }
+        Button(
+            onClick = {
+                val intent = Intent(context, Audiogram::class.java)
+                intent.putExtra("rightVolumes", rightVolumes.toIntArray())
+                intent.putExtra("leftVolumes", leftVolumes)
+                Log.d("volumes", "RIGHT: ${rightVolumes.joinToString()} \nLEFT: ${leftVolumes?.joinToString()}")
+                context.startActivity(intent)
+            },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF161A36))
+        ) {
+            Text("Continue")
         }
     }
 }

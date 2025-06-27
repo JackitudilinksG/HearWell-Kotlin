@@ -16,7 +16,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ModalDrawer
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material3.*
@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
 import com.example.hearwell.ui.theme.HearWellTheme
+import com.example.hearwell.LeftTesting
 
 class Calibrate : ComponentActivity() {
     private lateinit var mySound: MediaPlayer
@@ -174,7 +175,8 @@ fun CalibrationScreen(modifier: Modifier = Modifier, onPlaySound: () -> Unit) {
                     Button(
                         onClick = { onPlaySound() },
                         modifier = Modifier
-                            .background(color = Color(0xFF161A36))
+                            .background(color = Color.Transparent),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF161A36))
                     ) {
                         Icon(
                             imageVector = Icons.Filled.VolumeUp,
@@ -195,7 +197,8 @@ fun CalibrationScreen(modifier: Modifier = Modifier, onPlaySound: () -> Unit) {
                         onClick = {
                             val intent = Intent(context, LeftTesting::class.java)
                             context.startActivity(intent)
-                        }
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF161A36))
                     ) {
                         Text("Continue to Testing", fontSize = 18.sp)
                     }
@@ -206,7 +209,8 @@ fun CalibrationScreen(modifier: Modifier = Modifier, onPlaySound: () -> Unit) {
             onClick = { activity?.finish() },
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .padding(16.dp)
+                .padding(16.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF161A36))
         ) {
             Text("Back")
         }

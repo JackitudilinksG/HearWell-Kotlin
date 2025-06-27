@@ -12,6 +12,8 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -25,7 +27,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hearwell.ui.theme.HearWellTheme
@@ -103,71 +109,95 @@ fun AudiogramScreen(
 ) {
     val context = LocalContext.current
     val activity = remember { context as? Activity }
-    
-    Column(
-        modifier = modifier
+    Box(
+        modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
+            .background(color = Color(0xFFDADDF2))
     ) {
-        Text(
-            text = "Audiogram",
-            fontSize = 30.sp,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+        Image(
+            painter = painterResource(id = R.drawable.background_image),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxSize()
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        GraphView(
-            frequencies = frequencies,
-            leftVolumes = leftVolumes,
-            rightVolumes = rightVolumes,
-            modifier = Modifier.fillMaxWidth().height(300.dp)
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        /*
-        Button(
-            onClick = {
-                val message = buildString {
-                    append("Left Ear Values:\n")
-                    leftVolumes.forEachIndexed { index, value ->
-                        append("${frequencies[index]} Hz: ${value} dB\n")
+        Column(
+            modifier = modifier
+                .align(Alignment.Center)
+                .padding(start = 16.dp, end = 16.dp, top = 80.dp)
+                .fillMaxSize()
+        ) {
+            Text(
+                text = "Audiogram Result",
+                fontSize = 46.sp,
+                style = TextStyle(
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color(0xFFDADDF1),
+                    lineHeight = 42.sp
+                )
+            )
+            Text(
+                text = "The audiogram represents your hearing ability with respect to frequency and volume(in decibels)",
+                fontSize = 20.sp,
+                style = TextStyle(
+                    fontWeight = FontWeight.Normal,
+                    color = Color(0xFFDADDF1),
+                    lineHeight = 22.sp,
+                )
+            )
+            GraphView(
+                frequencies = frequencies,
+                leftVolumes = leftVolumes,
+                rightVolumes = rightVolumes,
+                modifier = Modifier.fillMaxWidth().height(300.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            /*
+            Button(
+                onClick = {
+                    val message = buildString {
+                        append("Left Ear Values:\n")
+                        leftVolumes.forEachIndexed { index, value ->
+                            append("${frequencies[index]} Hz: ${value} dB\n")
+                        }
+                        append("\nRight Ear Values:\n")
+                        rightVolumes.forEachIndexed { index, value ->
+                            append("${frequencies[index]} Hz: ${value} dB\n")
+                        }
                     }
-                    append("\nRight Ear Values:\n")
-                    rightVolumes.forEachIndexed { index, value ->
-                        append("${frequencies[index]} Hz: ${value} dB\n")
+                    Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+                },
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text("Show Current Values")
+            }
+             */
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = {
+                    val width = 600
+                    val height = 400
+                    val bitmap = createBitmap(width, height)
+                    if (saveBitmapToGallery(bitmap, context)) {
+                        Toast.makeText(context, "Graph saved as image", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(context, "Error saving image", Toast.LENGTH_SHORT).show()
                     }
-                }
-                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
-            },
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) {
-            Text("Show Current Values")
-        }
-         */
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = {
-                val width = 600
-                val height = 400
-                val bitmap = createBitmap(width, height)
-                if (saveBitmapToGallery(bitmap, context)) {
-                    Toast.makeText(context, "Graph saved as image", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(context, "Error saving image", Toast.LENGTH_SHORT).show()
-                }
-            },
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) {
-            Text("Save Graph as Image")
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = {
-                val intent = Intent(context, AudioTest::class.java)
-                context.startActivity(intent)
-            },
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) {
-            Text("Test Audio Settings")
+                },
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text("Save Graph as Image")
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = {
+                    val intent = Intent(context, AudioTest::class.java)
+                    context.startActivity(intent)
+                },
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text("Test Audio Settings")
+            }
         }
     }
 }
