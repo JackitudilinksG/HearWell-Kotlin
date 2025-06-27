@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "513860549341",
+    "project_id": "project1-f3e81",
+    "storage_bucket": "project1-f3e81.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:513860549341:android:23c03bc7f9c2f0eccc3934",
+        "android_client_info": {
+          "package_name": "com.example.hearwell"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWiC49zV1WfWfjOJpJpIU0ZisI2U82oY0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

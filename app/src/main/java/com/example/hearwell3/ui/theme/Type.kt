@@ -1,6 +1,7 @@
 package com.example.hearwell3.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -36,7 +37,13 @@ val Typography = Typography(
 )
 
 val customFont = FontFamily(
-    Font(R.font.philosopher_bold, weight = FontWeight.Normal),
-    Font(R.font.philosopher_italic, weight = FontWeight.Light),
-    Font(R.font.philosopher_regular, weight = FontWeight.ExtraLight),
+    Font(R.font.publicsans_black, weight = FontWeight.Black),
+    Font(R.font.publicsans_bold, weight = FontWeight.Bold),
+    Font(R.font.publicsans_extrabold, weight = FontWeight.ExtraBold),
+    Font(R.font.publicsans_extralight, weight = FontWeight.ExtraLight),
+    Font(R.font.publicsans_light, weight = FontWeight.Light),
+    Font(R.font.publicsans_medium, weight = FontWeight.Medium),
+    Font(R.font.publicsans_regular, weight = FontWeight.Normal),
+    Font(R.font.publicsans_semibold, weight = FontWeight.SemiBold),
+    Font(R.font.publicsans_thin, weight = FontWeight.Thin)
 )

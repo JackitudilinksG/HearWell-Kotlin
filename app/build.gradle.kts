@@ -2,6 +2,8 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")  // ← Compose Compiler plugin
+    alias(libs.plugins.google.gms.google.services)  // ← Compose Compiler plugin
+
 }
 
 android {
@@ -44,16 +46,7 @@ android {
         // Match the version declared above
         kotlinCompilerExtensionVersion = "1.5.15"
     }
-    /*
-    *
-    * externalNativeBuild {
-        cmake {
-            path 'app/src/main/jni/cpp/CMakeLists.txt'// Adjust path as needed
-            version '3.4.1' // Specify the CMake version
-        }
-
-    }
-    * */
+}
 
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
@@ -72,6 +65,8 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
     implementation("com.android.volley:volley:1.2.1")
+    implementation(libs.firebase.functions)
+    implementation(libs.firebase.firestore.ktx)
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -83,8 +78,11 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.5.0")
     implementation("io.coil-kt:coil-svg:2.5.0")
     implementation("androidx.compose.material:material-icons-extended:1.5.0")
+    implementation("com.google.accompanist:accompanist-pager:0.32.0")
+    implementation("androidx.compose.foundation:foundation:1.6.0")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.31.3-beta")
     
     // Data Binding dependencies
     implementation("androidx.databinding:databinding-runtime:8.2.2")
-}
+    implementation("androidx.compose.material:material-icons-extended")
 }
