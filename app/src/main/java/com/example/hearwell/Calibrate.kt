@@ -50,7 +50,13 @@ class Calibrate : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     CalibrationScreen(
                         modifier = Modifier.padding(innerPadding),
-                        onPlaySound = { mySound.start() }
+                        onPlaySound = {
+                            mySound.setOnCompletionListener {
+                                mySound.start()
+                                mySound.setOnCompletionListener { null }
+                            }
+                            mySound.start()
+                        }
                     )
                 }
             }

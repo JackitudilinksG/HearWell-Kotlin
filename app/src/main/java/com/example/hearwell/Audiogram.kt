@@ -52,8 +52,6 @@ class Audiogram : ComponentActivity() {
 
 @Composable
 fun AudiogramScreen(leftVolumes: IntArray?, rightVolumes: IntArray?) {
-    val context = LocalContext.current
-    val activity = remember { context as? Activity }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -90,14 +88,10 @@ fun AudiogramScreen(leftVolumes: IntArray?, rightVolumes: IntArray?) {
                     lineHeight = 22.sp,
                 )
             )
-            Box() {
                 Image(
                     painter = painterResource(id = R.drawable.graph_bg), // your background chart image
                     contentDescription = null,
-                    contentScale = ContentScale.FillBounds,
-                    modifier = Modifier.fillMaxSize()
                 )
-            }
         }
     }
 }
