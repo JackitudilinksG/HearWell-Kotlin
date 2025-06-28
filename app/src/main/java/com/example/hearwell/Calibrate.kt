@@ -33,7 +33,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
 import com.example.hearwell.ui.theme.HearWellTheme
-import com.example.hearwell.LeftTesting
 
 class Calibrate : ComponentActivity() {
     private lateinit var mySound: MediaPlayer

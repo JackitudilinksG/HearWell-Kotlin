@@ -17,8 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hearwell.ui.theme.HearWellTheme
 import com.google.firebase.firestore.FirebaseFirestore
-import com.example.hearwell.leftResultsGlobal
-import com.example.hearwell.rightResultsGlobal
 
 data class EarData(
     val Left: List<String> = listOf(),

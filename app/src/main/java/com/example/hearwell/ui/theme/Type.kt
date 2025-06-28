@@ -1,4 +1,4 @@
-package com.example.hearwell3.ui.theme
+package com.example.hearwell.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.Modifier
