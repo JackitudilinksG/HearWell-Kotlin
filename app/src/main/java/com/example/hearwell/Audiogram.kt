@@ -52,6 +52,7 @@ class Audiogram : ComponentActivity() {
 
 @Composable
 fun AudiogramScreen(leftVolumes: IntArray?, rightVolumes: IntArray?) {
+    var frequencies = intArrayOf(125, 250, 500, 1000, 2000, 4000, 8000)
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -88,10 +89,67 @@ fun AudiogramScreen(leftVolumes: IntArray?, rightVolumes: IntArray?) {
                     lineHeight = 22.sp,
                 )
             )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f) // or set fixed height to match the background image
+                    .padding(top = 16.dp)
+            ) {
                 Image(
-                    painter = painterResource(id = R.drawable.graph_bg), // your background chart image
+                    painter = painterResource(id = R.drawable.graph_bg),
                     contentDescription = null,
+                    contentScale = ContentScale.FillBounds,
+                    modifier = Modifier.fillMaxSize()
                 )
+
+                Canvas(modifier = Modifier.fillMaxSize()) {
+                    val frequencies = intArrayOf(125, 250, 500, 1000, 2000, 4000, 8000)
+                    val left = leftVolumes
+                    val right = rightVolumes
+
+                    if (left != null && right != null && left.size == frequencies.size && right.size == frequencies.size) {
+                        val maxDb = 120f
+                        val dbHeight = size.height / maxDb
+
+                        fun mapY(db: Float): Float = db * dbHeight
+                        val yOffset = 10f
+
+                        for (i in frequencies.indices) {
+                            val leftPadding = 180f  // adjust this to your liking
+                            val rightPadding = 40f
+                            val usableWidth = size.width - leftPadding - rightPadding
+                            val widthPerPoint = usableWidth / (frequencies.size - 1)
+                            val x = leftPadding + (i * widthPerPoint)
+
+
+                            // Draw left (X)
+                            val y = mapY(leftVolumes?.get(i)!!.toFloat()) + yOffset
+                            drawLine(
+                                color = Color.Green,
+                                start = Offset(x - 10f, y - 10f),
+                                end = Offset(x + 10f, y + 10f),
+                                strokeWidth = 4f
+                            )
+                            drawLine(
+                                color = Color.Green,
+                                start = Offset(x + 10f, y - 10f),
+                                end = Offset(x - 10f, y + 10f),
+                                strokeWidth = 4f
+                            )
+
+                            // Draw right (O)
+                            val yRight = mapY(right[i].toFloat())
+                            drawCircle(
+                                color = Color.Red,
+                                radius = 10f,
+                                center = Offset(x, yRight),
+                                style = androidx.compose.ui.graphics.drawscope.Fill
+                            )
+                        }
+                    }
+                }
+            }
+
         }
-    }
+}
 }

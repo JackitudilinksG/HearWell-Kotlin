@@ -98,13 +98,13 @@ fun RightFrequencyItemCard(frequency: RightFrequencyItem, onClick: () -> Unit, m
 fun RightFrequencySelectorLazyRow(): Map<Int, Int> {
     val volumeMap = remember {
         mutableStateMapOf(
-            125 to 10,
-            250 to 10,
-            500 to 10,
-            1000 to 10,
-            2000 to 10,
-            4000 to 10,
-            8000 to 10
+            125 to 40,
+            250 to 45,
+            500 to 50,
+            1000 to 55,
+            2000 to 60,
+            4000 to 65,
+            8000 to 70
         )
     }
 
